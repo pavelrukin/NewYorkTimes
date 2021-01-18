@@ -8,9 +8,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.pavelrukin.newyorktimes.R
 import com.pavelrukin.newyorktimes.databinding.TopStoriesFragmentBinding
+import com.pavelrukin.newyorktimes.model.TopStoriesResponse
 import com.pavelrukin.newyorktimes.ui.adapter.TopStoriesAdapter
 import com.pavelrukin.newyorktimes.utils.Resources
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -18,7 +20,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class TopStoriesFragment : Fragment() {
     private lateinit var binding: TopStoriesFragmentBinding
     private val viewModel: TopStoriesViewModel by viewModel()
-    var topStoriesAdapter: TopStoriesAdapter = TopStoriesAdapter()
+   private lateinit var topStoriesAdapter: TopStoriesAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -34,11 +36,20 @@ class TopStoriesFragment : Fragment() {
         // TODO: Use the ViewModel
     }
     private fun initRV() {
-        topStoriesAdapter = TopStoriesAdapter()
+        topStoriesAdapter = TopStoriesAdapter{topStoriesResult:TopStoriesResponse.TopStoriesResult -> toDetailFragment(topStoriesResult)  }
         binding.rvTopStories.apply {
             adapter = topStoriesAdapter
             layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         }
+    }
+    private fun toDetailFragment(postResult: TopStoriesResponse.TopStoriesResult) {
+        val bundle = Bundle().apply {
+            putParcelable("post_id",postResult)
+        }
+        findNavController().navigate(
+            R.id.action_topStoriesFragment_to_detailFragment,
+            bundle
+        )
     }
     private fun fetchTopStories() {
         viewModel.topStories.observe(viewLifecycleOwner, { response ->

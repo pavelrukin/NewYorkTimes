@@ -1,35 +1,36 @@
 package com.pavelrukin.newyorktimes.ui.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewbinding.ViewBinding
 import com.pavelrukin.newyorktimes.databinding.ItemTopStoriesBinding
 import com.pavelrukin.newyorktimes.model.TopStoriesResponse
 
-class TopStoriesAdapter():ListAdapter<TopStoriesResponse.TopStoriesResult,TopStoriesAdapter.TopStoriesViewHolder>(TopStoriesDiffUtilCallBack) {
+import com.squareup.picasso.Picasso
+
+class TopStoriesAdapter(private val clickListener: (TopStoriesResponse.TopStoriesResult) -> Unit) :
+    ListAdapter<TopStoriesResponse.TopStoriesResult, TopStoriesAdapter.TopStoriesViewHolder>(
+        TopStoriesDiffUtilCallBack) {
 
 
-   inner class TopStoriesViewHolder(private val binding: ItemTopStoriesBinding):RecyclerView.ViewHolder(binding.root) {
-fun bindTopStories(topStories:TopStoriesResponse.TopStoriesResult){
-    with(topStories){
-        binding.apply {
-            ivImagePost //todo image post
-            tvTitlePost.text = title
-        }
-    }
-}
-    }
+    inner class TopStoriesViewHolder( val binding: ItemTopStoriesBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onBindViewHolder(holder: TopStoriesViewHolder, position: Int) {
-        getItem(position)?.let { holder.bindTopStories(it) }
+        val topStories = getItem(position)
+        holder.binding.topStories = topStories
+        holder.itemView.setOnClickListener { clickListener(topStories) }
+        holder.binding.testUrl = topStories.multimedia[1].url
+        holder.binding.executePendingBindings()
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TopStoriesViewHolder {
-        val binding = ItemTopStoriesBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val binding =
+            ItemTopStoriesBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return TopStoriesViewHolder(binding)
     }
 }
@@ -46,7 +47,7 @@ object TopStoriesDiffUtilCallBack : DiffUtil.ItemCallback<TopStoriesResponse.Top
         oldItem: TopStoriesResponse.TopStoriesResult,
         newItem: TopStoriesResponse.TopStoriesResult,
     ): Boolean {
-     return oldItem  == newItem
+        return oldItem == newItem
     }
 
 }

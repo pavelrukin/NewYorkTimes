@@ -58,6 +58,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation "com.squareup.okhttp3:logging-interceptor:4.9.0"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     //navigation
     def nav_version = "2.3.2"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
@@ -72,8 +73,8 @@ dependencies {
     implementation "androidx.room:room-runtime:2.3.0-alpha04"
     kapt "androidx.room:room-compiler:2.3.0-alpha04"
     implementation "androidx.room:room-ktx:2.3.0-alpha04"
-    //paging
-    implementation 'androidx.paging:paging-runtime-ktx:3.0.0-alpha11'
+    //picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

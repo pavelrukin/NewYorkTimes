@@ -3,11 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph.xml"
-    app:startDestination="@id/mainFragment">
+    app:startDestination="@id/topStoriesFragment">
 
     <fragment
-        android:id="@+id/mainFragment"
+        android:id="@+id/topStoriesFragment"
         android:name="com.pavelrukin.newyorktimes.ui.news.TopStoriesFragment"
         android:label="main_fragment"
-        tools:layout="@layout/top_stories_fragment" />
+        tools:layout="@layout/top_stories_fragment" >
+
+        <action
+            android:id="@+id/action_topStoriesFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.pavelrukin.newyorktimes.ui.adapter.detail.DetailFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_detail">
+    <argument
+    android:name="post_id"
+    app:argType="com.pavelrukin.newyorktimes.model.TopStoriesResponse$TopStoriesResult" />
+    </fragment>
 </navigation>
