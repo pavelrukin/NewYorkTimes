@@ -14,6 +14,13 @@ fun ImageView.bindImageUrl(url: String?) {
             .into(this)
     }
 }
+@BindingAdapter(value = ["setAdapter"])
+fun RecyclerView.bindRecyclerViewAdapter(adapter: RecyclerView.Adapter<*>) {
+    this.run {
+        this.setHasFixedSize(true)
+        this.adapter = adapter
+    }
+}
 
 
 

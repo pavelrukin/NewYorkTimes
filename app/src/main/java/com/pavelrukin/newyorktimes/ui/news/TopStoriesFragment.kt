@@ -31,11 +31,14 @@ class TopStoriesFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+
         fetchTopStories()
-        initRV()
-        // TODO: Use the ViewModel
+         initRV()
+
     }
     private fun initRV() {
+
         topStoriesAdapter = TopStoriesAdapter{topStoriesResult:TopStoriesResponse.TopStoriesResult -> toDetailFragment(topStoriesResult)  }
         binding.rvTopStories.apply {
             adapter = topStoriesAdapter
@@ -55,30 +58,31 @@ class TopStoriesFragment : Fragment() {
         viewModel.topStories.observe(viewLifecycleOwner, { response ->
             when (response) {
                 is Resources.Success -> {
+                    hidePrgressBar()
                     response.data?.let { result ->
                        topStoriesAdapter.submitList(result.topStoriesResults)
                     }
                 }
                 is Resources.Error -> {
                     response.message?.let { message ->
-                       // hideView()
+                  hidePrgressBar()
                         Toast.makeText(activity, "An error: $message", Toast.LENGTH_SHORT).show()
-                        Log.i("TAG", "Message error === $message")
+
                     }
                 }
                 is Resources.Loading -> {
-           /*         hideView()
-                    showProgressBar()*/
+
+                    showProgressBar()
                 }
             }
         })
     }
-    /* fun initView() {
-         //topStoriesAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-         binding.rvTopStories.adapter = topStoriesAdapter
-         binding.rvTopStories.adapter = topStoriesAdapter.withLoadStateHeaderAndFooter(
-             header = TopStoriesLoadingAdapter { topStoriesAdapter.retry() },
-             footer = TopStoriesLoadingAdapter { topStoriesAdapter.retry() }
-         )
-     }*/
+
+    private fun showProgressBar() {
+        binding.progressBar.visibility = View.VISIBLE
+    }
+    private fun hidePrgressBar(){
+        binding.progressBar.visibility = View.INVISIBLE
+    }
+
 }
